@@ -14,7 +14,7 @@ public class pathAnimation : MonoBehaviour
     private float minDistance = 0.1f; //If the distance between the enemy and the waypoint is less than this, then it has reacehd the waypoint
     private int lastWaypointIndex;
 
-    private float movementSpeed = 2.0f;
+    private float movementSpeed = 1.0f;
     private float rotationSpeed = 4.0f;
 
     //public bool ack=false;
@@ -39,7 +39,7 @@ public class pathAnimation : MonoBehaviour
     // Update is called once per frame
     void Update(){
 
-        if (taskPhaseManager.ack1) { 
+        if (BehaviorManager.ack1) { 
             setPosition();
         }
     }
@@ -89,7 +89,7 @@ public class pathAnimation : MonoBehaviour
             targetWaypointIndex = 0;
             movementSpeed = 0f;
             rotationSpeed = 0f;
-            anim.SetBool("walk", false);
+            //anim.SetBool("walk", false);
 
             GetComponent<VRIK>().enabled = true;
             GetComponent<Animator>().enabled = false;

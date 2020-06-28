@@ -16,10 +16,16 @@ public class Hand : MonoBehaviour
     private Interactable m_CurrentInteractable = null;
     public List<Interactable> m_ContactInteractables = new List<Interactable>();
 
+    public static bool rightTriggerPress, leftTriggerPress;
+
+    string pressCtrl;
+
+    public static bool moveToTask2 = false;
+    public static bool box1Speech = false;
+
     private void Awake(){
         m_Pose = GetComponent<SteamVR_Behaviour_Pose>();
         m_Joint = GetComponent<FixedJoint>();
-
     }
 
     // Update is called once per frame
@@ -27,13 +33,25 @@ public class Hand : MonoBehaviour
     {   //down
         if (m_GrabAction.GetStateDown(m_Pose.inputSource))
         {
-            Debug.Log(m_Pose.inputSource +"trigger down");
+            //Debug.Log(m_Pose.inputSource +" trigger down");
+
+            if (m_Pose.inputSource.ToString() == "LeftHand")
+            {
+                //Debug.Log("LeftHand");
+                leftTriggerPress = true;
+            }
+
+            if (m_Pose.inputSource.ToString() == "RightHand")
+            {
+                //Debug.Log("rightHand");
+                rightTriggerPress = true;
+            }
             PickUp();
         }
         //up
         if (m_GrabAction.GetStateUp(m_Pose.inputSource))
         {
-            Debug.Log(m_Pose.inputSource + "trigger up");
+            //Debug.Log(m_Pose.inputSource + " trigger up");
             Drop();
         }
 
@@ -73,6 +91,9 @@ public class Hand : MonoBehaviour
 
         //set active hand
         m_CurrentInteractable.m_ActiveHand = this;
+
+        box1Speech = true;
+        
     }
 
     public void Drop()
@@ -92,6 +113,8 @@ public class Hand : MonoBehaviour
         //clear
         m_CurrentInteractable.m_ActiveHand = null;
         m_CurrentInteractable = null;
+        moveToTask2 = true;
+
 
     }
 

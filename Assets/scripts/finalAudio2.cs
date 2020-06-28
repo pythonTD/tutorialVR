@@ -37,31 +37,4 @@ public class finalAudio2 : MonoBehaviour{
 
     }
 
-
-
-    /*
-        // Start is called before the first frame update
-        void Start(){
-            clip6 = Resources.Load<AudioClip>("6");
-            myAudioSource = GameObject.Find("FemaleAvatar").GetComponent<AudioSource>();
-            Answers = GameObject.Find("Answers");
-        }
-
-        // Update is called once per frame
-        void Update(){
-            Debug.Log(area);
-        }
-
-        private void OnTriggerEnter(Collider other){
-            if (other.gameObject.tag == "answer"){
-                Answers.SetActive(false);
-
-                myAudioSource.clip = clip6;
-                myAudioSource.Play();
-            }
-            area = true;
-        }
-
-        */
-
 }

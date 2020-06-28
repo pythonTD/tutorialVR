@@ -6,6 +6,7 @@ TagManager:
   tags:
   - VH
   - Interactable
+  - USER
   layers:
   - Default
   - TransparentFX

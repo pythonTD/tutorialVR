@@ -5,7 +5,7 @@
       "app_key": "application.generated.unity.waypointss.exe",
       "launch_type": "url",
       "url": "steam://launch/",
-      "action_manifest_path": "D:\\Matias\\RESEARCH\\COLLABORATIVE_SIM\\tutorialVR\\tutorialvr\\Assets\\StreamingAssets\\SteamVR\\actions.json",
+      "action_manifest_path": "D:\\Matias\\RESEARCH\\COLLABORATIVE_SIM\\tutorialVR\\TutorialVR\\tutorialVR\\Assets\\StreamingAssets\\SteamVR\\actions.json",
       "strings": {
         "en_us": {
           "name": "waypointss [Testing]"

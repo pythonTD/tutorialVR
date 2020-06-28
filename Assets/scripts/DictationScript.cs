@@ -5,48 +5,134 @@ using UnityEngine.Windows.Speech;
 
 public class DictationScript : MonoBehaviour
 {
-    [HideInInspector]
-    [SerializeField]
-    private Text m_Hypotheses;
+    static public string ResultedText;
 
-    [HideInInspector]
-    [SerializeField]
-    private Text m_Recognitions;
+    protected DictationRecognizer dictationRecognizer;
 
-    private DictationRecognizer m_DictationRecognizer;
-    [HideInInspector]
-    static public string userAnswer;
+    [System.Serializable]
+    public class UnityEventString : UnityEngine.Events.UnityEvent<string> { };
+    public UnityEventString OnPhraseRecognized;
+
+    public UnityEngine.Events.UnityEvent OnUserStartedSpeaking;
+
+    private bool isUserSpeaking;
 
     void Start()
     {
-        m_DictationRecognizer = new DictationRecognizer();
+        StartDictationEngine();
+    }
 
-        m_DictationRecognizer.DictationResult += (text, confidence) =>
-        {
-            //Debug.LogFormat("Dictation result: {0}", text);
-            //m_Recognitions.text += text + "\n";
-            userAnswer = text;
-            //Debug.Log(userAnswer);
-        };
+    /// <summary>
+    /// Hypotethis are thrown super fast, but could have mistakes.
+    /// </summary>
+    /// <param name="text"></param>
+    private void DictationRecognizer_OnDictationHypothesis(string text)
+    {
+        Debug.LogFormat("Dictation hypothesis: {0}", text);
 
-        m_DictationRecognizer.DictationHypothesis += (text) =>
+        if (isUserSpeaking == false)
         {
-            //Debug.LogFormat("Dictation hypothesis: {0}", text);
-            //m_Hypotheses.text += text;
+            isUserSpeaking = true;
+            OnUserStartedSpeaking.Invoke();
+        }
+    }
 
-        };
-    
-        m_DictationRecognizer.DictationComplete += (completionCause) =>
+    /// <summary>
+    /// thrown when engine has some messages, that are not specifically errors
+    /// </summary>
+    /// <param name="completionCause"></param>
+    private void DictationRecognizer_OnDictationComplete(DictationCompletionCause completionCause)
+    {
+        if (completionCause != DictationCompletionCause.Complete)
         {
-            if (completionCause != DictationCompletionCause.Complete)
-                Debug.LogErrorFormat("Dictation completed unsuccessfully: {0}.", completionCause);
-        };
+            Debug.LogWarningFormat("Dictation completed unsuccessfully: {0}.", completionCause);
 
-        m_DictationRecognizer.DictationError += (error, hresult) =>
+
+            switch (completionCause)
+            {
+                case DictationCompletionCause.TimeoutExceeded:
+                case DictationCompletionCause.PauseLimitExceeded:
+                    //we need a restart
+                    CloseDictationEngine();
+                    StartDictationEngine();
+                    break;
+
+                case DictationCompletionCause.UnknownError:
+                case DictationCompletionCause.AudioQualityFailure:
+                case DictationCompletionCause.MicrophoneUnavailable:
+                case DictationCompletionCause.NetworkFailure:
+                    //error without a way to recover
+                    CloseDictationEngine();
+                    break;
+
+                case DictationCompletionCause.Canceled:
+                //happens when focus moved to another application 
+
+                case DictationCompletionCause.Complete:
+                    CloseDictationEngine();
+                    StartDictationEngine();
+                    break;
+            }
+        }
+    }
+
+    /// <summary>
+    /// Resulted complete phrase will be determined once the person stops speaking. the best guess from the PC will go on the result.
+    /// </summary>
+    /// <param name="text"></param>
+    /// <param name="confidence"></param>
+    private void DictationRecognizer_OnDictationResult(string text, ConfidenceLevel confidence)
+    {
+        //Debug.LogFormat("Dictation result: {0}", text);
+        //if (ResultedText) ResultedText.text += text + "\n";
+        ResultedText = text;
+
+
+        if (isUserSpeaking == true)
         {
-            Debug.LogErrorFormat("Dictation error: {0}; HResult = {1}.", error, hresult);
-        };
-        
-        m_DictationRecognizer.Start();
+            isUserSpeaking = false;
+            OnPhraseRecognized.Invoke(text);
+        }
+    }
+
+    private void DictationRecognizer_OnDictationError(string error, int hresult)
+    {
+        Debug.LogErrorFormat("Dictation error: {0}; HResult = {1}.", error, hresult);
+    }
+
+
+    private void OnApplicationQuit()
+    {
+        CloseDictationEngine();
+    }
+
+    private void StartDictationEngine()
+    {
+        isUserSpeaking = false;
+
+        dictationRecognizer = new DictationRecognizer();
+
+        dictationRecognizer.DictationHypothesis += DictationRecognizer_OnDictationHypothesis;
+        dictationRecognizer.DictationResult += DictationRecognizer_OnDictationResult;
+        dictationRecognizer.DictationComplete += DictationRecognizer_OnDictationComplete;
+        dictationRecognizer.DictationError += DictationRecognizer_OnDictationError;
+
+        dictationRecognizer.Start();
+    }
+
+    private void CloseDictationEngine()
+    {
+        if (dictationRecognizer != null)
+        {
+            dictationRecognizer.DictationHypothesis -= DictationRecognizer_OnDictationHypothesis;
+            dictationRecognizer.DictationComplete -= DictationRecognizer_OnDictationComplete;
+            dictationRecognizer.DictationResult -= DictationRecognizer_OnDictationResult;
+            dictationRecognizer.DictationError -= DictationRecognizer_OnDictationError;
+
+            if (dictationRecognizer.Status == SpeechSystemStatus.Running)
+                dictationRecognizer.Stop();
+
+            dictationRecognizer.Dispose();
+        }
     }
 }

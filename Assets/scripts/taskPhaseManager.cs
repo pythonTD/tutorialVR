@@ -20,7 +20,7 @@ public class taskPhaseManager : MonoBehaviour{
     private void Start()
     {
         animComponent = characterMoving.GetComponent<Animator>();
-        //Fetch the current Animation clip information for the base layer
+
         m_CurrentClipInfo = animComponent.GetCurrentAnimatorClipInfo(0);
     }
 
@@ -28,25 +28,13 @@ public class taskPhaseManager : MonoBehaviour{
     // Update is called once per frame
     void Update()
     {
-        //ack1 = ack1Status;
-        ack2 = finalAudio.activateSecond;
+        ack2 = BehaviorManager.activateSecond;
 
-        //clipName = m_CurrentClipInfo[0].clip.name;
-
-
-        if (animComponent.GetCurrentAnimatorStateInfo(0).IsName("Box1")) {
-            ack1 = true;
-
-        }
         if (ack2)
         {
             ack1 = false;
-            //characterMoving.GetComponent<VRIK>().enabled=false;
             characterMoving.GetComponent<pathAnimation2>().enabled = true;
             characterMoving.GetComponent<pathAnimation>().enabled = false;
-
         }
-        
-
-    }
+     }
 }

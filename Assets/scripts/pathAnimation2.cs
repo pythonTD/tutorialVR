@@ -14,7 +14,7 @@ public class pathAnimation2 : MonoBehaviour
     private float minDistance = 0.1f; //If the distance between the enemy and the waypoint is less than this, then it has reacehd the waypoint
     private int lastWaypointIndex;
 
-    private float movementSpeed = 2.0f;
+    private float movementSpeed = 0.8f;
     private float rotationSpeed = 4.0f;
 
     VRIK ik;
