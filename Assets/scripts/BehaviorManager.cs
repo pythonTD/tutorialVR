@@ -7,6 +7,9 @@ using CrazyMinnow.SALSA;
 
 public class BehaviorManager : MonoBehaviour
 {
+    public AudioClip[] femaleAudios;
+    public AudioClip[] maleAudios;
+
     public AudioClip[] audios;
     AudioSource myAudioSource;
 
@@ -16,6 +19,9 @@ public class BehaviorManager : MonoBehaviour
     Animator anim;
     VRIK VRIKscript;
     Salsa3D salsa;
+
+    public GameObject FemaleCharacter;
+    public GameObject MaleCharacter;
 
     public GameObject character;
 
@@ -45,6 +51,9 @@ public class BehaviorManager : MonoBehaviour
 
     bool box1Status;
 
+    bool female;
+    bool male;
+
     float count = 0;
 
 
@@ -52,6 +61,29 @@ public class BehaviorManager : MonoBehaviour
 
     private void Awake()
     {
+        if (LoadNextScene.participantGender=="Male") { 
+            character = MaleCharacter;
+            FemaleCharacter.SetActive(false);
+            male = true;
+        }
+
+        if (LoadNextScene.participantGender == "Female")
+        {
+            character = FemaleCharacter;
+            MaleCharacter.SetActive(false);
+           female = true;
+        }
+
+        if (male) {
+            audios = maleAudios; 
+
+        }
+        if (female)
+        {
+            audios = femaleAudios;
+
+        }
+
         anim = character.GetComponent<Animator>();
         myAudioSource = character.GetComponent<AudioSource>();
         salsa = character.GetComponent<Salsa3D>();
@@ -70,15 +102,14 @@ public class BehaviorManager : MonoBehaviour
 
     }
 
-    private void Start(){
-        Invoke("vhStartedConv", 10);
 
+    private void Start(){
+        Invoke("vhStartedConv", 2);
         box1move = GameObject.Find("userT1Trigger");
 
-        if (Box1Animation.liftBoxOne) {
-            Debug.Log("MIERDA");
-
-        }
+        //if (Box1Animation.liftBoxOne) {
+        //    Debug.Log("MIERDA");
+        //}
     }
 
 
@@ -150,49 +181,6 @@ public class BehaviorManager : MonoBehaviour
 
 
 
-
-
-        /*
-        if (userBox1Routine == true && box1UserSpeech.user1Lift == true)
-        {
-            salsa.SetAudioClip(audios[4]);
-            salsa.Play();
-            userBox1Routine = false;
-
-        }
-
-        //ask if the user is ok. if answe is yes. then move to second box. do the same for second box.
-        
-        
-        
-        
-        
-        
-        /*
-         * 
-         *         //play right trigger audio
-        if (anim.GetCurrentAnimatorStateInfo(0).IsName("control1") && control1 == true)
-        {
-            salsa.SetAudioClip(audios[1]);
-            salsa.Play();
-            control1 = false;
-        }
-        if (userBox1Speech == true && Hand.box1Speech == true)
-        {
-            salsa.SetAudioClip(audios[5]);
-            salsa.Play();
-            userBox1Speech = false;
-        }
-
-        if (userBox2Routine == true && Hand.moveToTask2 == true)
-        {
-            salsa.SetAudioClip(audios[6]);
-            salsa.Play();
-            userBox2Routine = false;
-            box1move.transform.position = new Vector3(10f,10f,10f);
-        }
-        
-        */
 
 
     }
