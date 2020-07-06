@@ -104,7 +104,7 @@ public class BehaviorManager : MonoBehaviour
 
 
     private void Start(){
-        Invoke("vhStartedConv", 2);
+        Invoke("vhStartedConv", 5);
         box1move = GameObject.Find("userT1Trigger");
 
         //if (Box1Animation.liftBoxOne) {
@@ -172,7 +172,7 @@ public class BehaviorManager : MonoBehaviour
 
 
         if (box2Routine ==true && speechInput == "ready" || box2Routine == true && speechInput == "finished"
-            || box2Routine == true && speechInput == "comfortable") {
+            || box2Routine == true && speechInput == "comfortable" || box2Routine == true && speechInput == "I'm ready") {
             salsa.SetAudioClip(audios[5]);
             salsa.Play();
             activateSecond = true;

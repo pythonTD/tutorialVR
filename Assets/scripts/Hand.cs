@@ -16,12 +16,17 @@ public class Hand : MonoBehaviour
     private Interactable m_CurrentInteractable = null;
     public List<Interactable> m_ContactInteractables = new List<Interactable>();
 
-    public static bool rightTriggerPress, leftTriggerPress;
+    public static bool rightTriggerPress = false;
+    public static bool leftTriggerPress = false;
 
     string pressCtrl;
 
     public static bool moveToTask2 = false;
     public static bool box1Speech = false;
+
+    public SteamVR_Input_Sources LeftInputSource = SteamVR_Input_Sources.LeftHand;
+    public SteamVR_Input_Sources RightInputSource = SteamVR_Input_Sources.RightHand;
+
 
     private void Awake(){
         m_Pose = GetComponent<SteamVR_Behaviour_Pose>();
@@ -30,25 +35,26 @@ public class Hand : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {   //down
+    {   
+        //Debug.Log("Left Trigger value:" + SteamVR_Actions._default.Squeeze.GetAxis(LeftInputSource).ToString());
+        //Debug.Log("Right Trigger value:" + SteamVR_Actions._default.Squeeze.GetAxis(RightInputSource).ToString());
+
+        if (SteamVR_Actions._default.Squeeze.GetAxis(RightInputSource) > 0.1f)
+        {
+            Debug.Log("rightHand");
+            rightTriggerPress = true;
+        }
+
+
+        if (SteamVR_Actions._default.Squeeze.GetAxis(LeftInputSource) > 0.1f && rightTriggerPress==true) {
+            Debug.Log("LeftHand");
+            leftTriggerPress = true;
+        }
+
         if (m_GrabAction.GetStateDown(m_Pose.inputSource))
         {
-            //Debug.Log(m_Pose.inputSource +" trigger down");
-
-            if (m_Pose.inputSource.ToString() == "LeftHand")
-            {
-                //Debug.Log("LeftHand");
-                leftTriggerPress = true;
-            }
-
-            if (m_Pose.inputSource.ToString() == "RightHand")
-            {
-                //Debug.Log("rightHand");
-                rightTriggerPress = true;
-            }
             PickUp();
         }
-        //up
         if (m_GrabAction.GetStateUp(m_Pose.inputSource))
         {
             //Debug.Log(m_Pose.inputSource + " trigger up");
