@@ -11,15 +11,20 @@ public class taskPhaseManager : MonoBehaviour{
     public bool ack1Status;
     public bool ack2Status;
 
-    public GameObject characterMoving;
+    public GameObject agent;
     Animator animComponent;
 
     string clipName;
     AnimatorClipInfo[] m_CurrentClipInfo;
 
+
     private void Start()
     {
-        animComponent = characterMoving.GetComponent<Animator>();
+
+        agent = BehaviorManager.character;
+
+
+        animComponent = agent.GetComponent<Animator>();
 
         m_CurrentClipInfo = animComponent.GetCurrentAnimatorClipInfo(0);
     }
@@ -33,8 +38,8 @@ public class taskPhaseManager : MonoBehaviour{
         if (ack2)
         {
             ack1 = false;
-            characterMoving.GetComponent<pathAnimation2>().enabled = true;
-            characterMoving.GetComponent<pathAnimation>().enabled = false;
+            agent.GetComponent<pathAnimation2>().enabled = true;
+            agent.GetComponent<pathAnimation>().enabled = false;
         }
      }
 }

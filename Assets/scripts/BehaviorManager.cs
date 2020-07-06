@@ -23,7 +23,7 @@ public class BehaviorManager : MonoBehaviour
     public GameObject FemaleCharacter;
     public GameObject MaleCharacter;
 
-    public GameObject character;
+    static public GameObject character;
 
     private bool explanation = true;
     private string hello = "Empty";
@@ -106,10 +106,6 @@ public class BehaviorManager : MonoBehaviour
     private void Start(){
         Invoke("vhStartedConv", 5);
         box1move = GameObject.Find("userT1Trigger");
-
-        //if (Box1Animation.liftBoxOne) {
-        //    Debug.Log("MIERDA");
-        //}
     }
 
 
@@ -118,7 +114,7 @@ public class BehaviorManager : MonoBehaviour
         CheckPlayKey();
 
         speechInput = DictationScript.ResultedText;
-        Debug.Log(speechInput);
+        //Debug.Log(speechInput);
 
     }
     private void CheckPlayKey()
@@ -171,7 +167,7 @@ public class BehaviorManager : MonoBehaviour
         }
 
 
-        if (box2Routine ==true && speechInput == "ready" || box2Routine == true && speechInput == "finished"
+        if (box2Routine ==true && speechInput == "ready" || box2Routine == true && speechInput == "Ok"
             || box2Routine == true && speechInput == "comfortable" || box2Routine == true && speechInput == "I'm ready") {
             salsa.SetAudioClip(audios[5]);
             salsa.Play();

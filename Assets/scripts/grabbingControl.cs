@@ -58,7 +58,7 @@ public class grabbingControl : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(SteamVR_Actions._default.Squeeze.GetAxis(rightHandFist).ToString());
+        //Debug.Log(SteamVR_Actions._default.Squeeze.GetAxis(rightHandFist).ToString());
         if (SteamVR_Actions._default.Squeeze.GetAxis(rightHandFist) > 0.1f)
         {
             rightFist();

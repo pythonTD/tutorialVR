@@ -16,7 +16,9 @@ public class finalAudio2 : MonoBehaviour{
     // Start is called before the first frame update
     void Start()
     {
-        myAudioSource = GameObject.Find("FemaleAvatar").GetComponent<AudioSource>();
+        myAudioSource = BehaviorManager.character.GetComponent<AudioSource>();
+
+
     }
 
     private void OnTriggerEnter(Collider other){
@@ -28,7 +30,7 @@ public class finalAudio2 : MonoBehaviour{
         
     }
 
-    private void OnTriggerExit(Collider other)
+    /*private void OnTriggerExit(Collider other)
     {
         if (other.gameObject.tag == "VH"){
 
@@ -36,5 +38,5 @@ public class finalAudio2 : MonoBehaviour{
         }
 
     }
-
+    */
 }
